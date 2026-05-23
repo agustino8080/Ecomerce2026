@@ -2,127 +2,126 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO - Secure Shield v7.2</title>
+    <title>TINO TV MASTER PRO v9.7 - Minimal Select</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        .layout-container { display: flex; width: 100vw; min-height: 100vh; }
+        html, body { background: #000; color: #fff; width: 100vw; height: 100vh; overflow: hidden; }
 
-        /* BANNER IZQUIERDO: MÁS ANCHO Y CON TEXTO */
-        .side-banner { width: 280px; background: #000; overflow: hidden; border-right: 1px solid #1a1a1a; cursor: pointer; position: sticky; top: 0; height: 100vh; z-index: 500; }
-        .image-scroll { display: flex; flex-direction: column; animation: scroll-up 50s linear infinite; }
+        .layout-container { display: grid; grid-template-columns: 20% 80%; width: 100%; height: 100%; }
 
-        .ad-box { position: relative; width: 100%; border-bottom: 3px solid var(--neon); }
-        .ad-box img { width: 100%; height: 380px; object-fit: cover; display: block; }
-        .ad-content { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); padding: 20px 15px; }
-        .ad-title { font-size: 16px; font-weight: 900; color: var(--neon); text-transform: uppercase; text-shadow: 0 0 10px rgba(0,255,204,0.5); }
-        .ad-desc { font-size: 11px; color: #fff; margin-top: 5px; font-weight: 600; }
-
+        /* BANNER IZQUIERDO */
+        .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; cursor: pointer; }
+        .image-scroll { display: flex; flex-direction: column; animation: scroll-up 60s linear infinite; }
+        .ad-box { position: relative; width: 100%; border-bottom: 2px solid var(--neon); }
+        .ad-box img { width: 100%; height: auto; display: block; }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
-        /* CONTENEDOR PRINCIPAL */
-        .app-shell { flex: 1; display: flex; flex-direction: column; background: #000; position: relative; z-index: 10; }
-        header { padding: 12px 20px; background: #000; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 16px; font-weight: 900; color: var(--neon); text-transform: uppercase; letter-spacing: 1px; }
+        /* CUERPO APP */
+        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; }
 
-        /* --- SISTEMA DE MASCARAS MEJORADO (COBERTURA TOTAL) --- */
+        header {
+            padding: 15px 20px; background: #000; border-bottom: 1px solid #1a1a1a;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 2000;
+        }
+        .logo-area { display: flex; flex-direction: column; }
+        .logo { font-size: 18px; font-weight: 900; color: var(--neon); text-transform: uppercase; }
+
+        /* SELECTORES RÁPIDOS */
+        .nav-controls { display: flex; gap: 15px; align-items: center; }
+        .tv-select {
+            background: #111; color: #fff; border: 1px solid #333;
+            padding: 10px 15px; border-radius: 8px; font-size: 11px; font-weight: 900;
+            outline: none; cursor: pointer; transition: 0.3s; width: 150px;
+        }
+        .tv-select:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+
+        /* REPRODUCTOR */
         .player-wrapper {
+            flex: 1; /* Ocupa todo el espacio vertical disponible */
             width: 100%;
-            aspect-ratio: 16/9;
             position: relative;
             background: #000;
             overflow: hidden;
-            border-bottom: 2px solid var(--neon);
         }
 
-        /* 1. MÁSCARA SUPERIOR: Ticker de Noticias */
-        .mask-top {
-            position: absolute; top: 0; left: 0; width: 100%; height: 45px;
-            background: #000; z-index: 100; display: flex; align-items: center;
-            border-bottom: 1px solid var(--neon); overflow: hidden;
-        }
-        .ticker { white-space: nowrap; font-size: 14px; font-weight: 900; color: var(--neon); display: inline-block; animation: ticker-move 45s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        /* MASCARAS */
+        .mask-top { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 150; display: flex; align-items: center; border-bottom: 1px solid var(--neon); overflow: hidden; }
+        .ticker { white-space: nowrap; font-size: 14px; font-weight: 900; color: var(--neon); display: inline-block; animation: ticker-move 40s linear infinite; }
+        @keyframes ticker-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* 2. MÁSCARA DERECHA: Tapa-Chat (35% para cubrir el chat lateral completamente) */
-        .mask-right {
-            position: absolute; top: 45px; right: 0; width: 35%; height: calc(100% - 100px);
-            background: #000; z-index: 100; border-left: 2px solid #222; cursor: pointer;
-        }
-        .mask-right video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; position: absolute; }
-        .mask-right video.active { opacity: 1; }
+        .mask-right-video { position: absolute; top: 45px; right: 0; width: 33%; height: calc(100% - 90px); background: #000; z-index: 100; border-left: 2px solid #222; }
+        .mask-right-video video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1s; position: absolute; }
+        .mask-right-video video.active { opacity: 1; }
 
-        /* 3. MÁSCARA INFERIOR: Tapa Redes Sociales */
-        .mask-bottom {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 55px;
-            background: #000; z-index: 100; border-top: 2px solid var(--neon);
-            display: flex; overflow: hidden; cursor: pointer;
-        }
-        .mask-bottom-scroll { display: flex; animation: scroll-x 30s linear infinite; height: 100%; }
-        .bottom-ad-item { position: relative; height: 100%; display: flex; align-items: center; padding: 0 20px; border-right: 1px solid #333; }
-        .bottom-ad-item img { height: 80%; width: auto; border-radius: 4px; border: 1px solid var(--neon); }
-        .bottom-ad-item span { font-size: 11px; margin-left: 12px; color: var(--neon); font-weight: 900; white-space: nowrap; }
-
+        .mask-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 100; border-top: 1px solid var(--neon); overflow: hidden; }
+        .bottom-scroll { display: flex; animation: scroll-x 25s linear infinite; height: 100%; }
+        .bottom-scroll img { height: 100%; padding: 5px; }
         @keyframes scroll-x { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        iframe { width: 100%; height: 100%; border: none; position: relative; z-index: 1; background: #000; }
+        iframe { width: 100%; height: 100%; border: none; background: #000; }
+        .tv-trigger { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .btn-play { background: var(--neon); color: #000; border: none; padding: 25px 60px; border-radius: 12px; font-weight: 900; font-size: 24px; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
 
-        .tv-trigger { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 500; display: flex; justify-content: center; align-items: center; }
-        .btn-play { background: var(--neon); color: #000; border: none; padding: 20px 45px; border-radius: 12px; font-weight: 900; font-size: 20px; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
-
-        .container { padding: 20px; flex: 1; }
-        .cat-name { font-size: 13px; font-weight: 900; color: #666; margin: 30px 0 15px 0; text-transform: uppercase; border-left: 4px solid var(--neon); padding-left: 12px; }
-        .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .channel-card { background: var(--card); border: 2px solid #1a1a1a; border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; color: #fff; transition: 0.3s; }
-        .channel-card:focus, .channel-card:hover { border-color: var(--neon); background: #1a1a20; transform: scale(1.05); outline: none; }
-
-        @media (max-width: 1100px) { .side-banner { width: 180px; } .mask-right { width: 35%; } }
-        @media (max-width: 900px) { .side-banner { display: none; } .mask-right { display: none; } .mask-bottom { height: 40px; } }
+        @media (max-width: 900px) { .side-banner, .mask-right-video, .nav-controls { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="layout-container">
-    <!-- BANNER IZQUIERDO: TODAS LAS IMÁGENES CON CONTENIDO -->
-    <div class="side-banner" onclick="window.open('https://sportivo.whacka.app/', '_blank')">
-        <div class="image-scroll" id="left-scroll-container"></div>
+    <!-- BANNER IZQUIERDO -->
+    <div class="side-banner">
+        <div class="image-scroll" id="left-ads"></div>
     </div>
 
-    <div class="app-shell" id="tv-scroll">
+    <div class="app-shell">
         <header>
-            <div class="logo">TINO TV MASTER</div>
-            <div id="status-bar" style="color: var(--neon); font-size: 9px; font-weight: 900;">PROTECCIÓN 🛡️ ACTIVADA</div>
+            <div class="logo-area">
+                <div class="logo">TINO TV MASTER</div>
+                <div style="font-size: 8px; color: #00ffcc; font-weight: 900; border: 1px solid #00ffcc; padding: 2px 5px; border-radius: 4px; display: inline-block; margin-top: 2px;">SECURE PLAYER ✅</div>
+            </div>
+
+            <!-- SELECTORES EXCLUSIVOS -->
+            <div class="nav-controls">
+                <select class="tv-select" id="sel-deportes" onchange="quickPlay(this.value)">
+                    <option value="">⚽ DEPORTES</option>
+                </select>
+                <select class="tv-select" id="sel-tv" onchange="quickPlay(this.value)">
+                    <option value="">📺 TV ABIERTA</option>
+                </select>
+                <select class="tv-select" id="sel-cine" onchange="quickPlay(this.value)">
+                    <option value="">🎬 CINE</option>
+                </select>
+            </div>
         </header>
 
         <div class="player-wrapper">
-            <!-- MASCARA SUPERIOR: TAPA EL LOGO ORIGINAL -->
-            <div class="mask-top"><div class="ticker" id="live-ticker">CONECTANDO CON SERVIDOR DE NOTICIAS DEPORTIVAS...</div></div>
-
-            <!-- MASCARA DERECHA: TAPA EL CHAT (AMPLIADA AL 40%) -->
-            <div class="mask-right" onclick="window.open('https://sportivo.whacka.app/', '_blank')">
-                <video id="tv-vid1" autoplay muted loop playsinline class="active"><source src="images/banner_video.mp4"></video>
-                <video id="tv-vid2" muted loop playsinline><source src="images/banner_video2.mp4"></video>
+            <!-- MASCARAS PROTECTORAS -->
+            <div class="mask-top"><div class="ticker" id="live-ticker">CONECTANDO NOTICIAS EN VIVO...</div></div>
+            <div class="mask-right-video">
+                <video id="v1" autoplay muted loop playsinline class="active"><source src="images/banner_video.mp4"></video>
+                <video id="v2" muted loop playsinline><source src="images/banner_video2.mp4"></video>
             </div>
+            <div class="mask-bottom"><div class="bottom-scroll" id="bottom-ads"></div></div>
 
-            <!-- MASCARA INFERIOR: TAPA REDES SOCIALES -->
-            <div class="mask-bottom" onclick="window.open('https://sportivo.whacka.app/', '_blank')">
-                <div class="mask-bottom-scroll" id="bottom-scroll-container"></div>
-            </div>
-
+            <!-- DISPARADOR DE SEÑAL -->
             <div id="tv-shield" class="tv-trigger">
-                <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ REPRODUCIR CANAL</button>
+                <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ CONECTAR SEÑAL</button>
+                <p style="font-size: 11px; color: #666; margin-top: 15px; font-weight: bold;">PROTECCIÓN ANTI-POPUPS ACTIVA</p>
             </div>
 
-            <iframe id="tv-frame" src="about:blank" allowfullscreen allow="autoplay"></iframe>
+            <iframe id="tv-frame" src=""
+                    allowfullscreen
+                    allow="autoplay; encrypted-media"
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-presentation">
+            </iframe>
         </div>
-
-        <div class="container" id="main-grid"></div>
     </div>
 </div>
 
@@ -130,40 +129,16 @@
 <script>
     let currentUrl = "";
 
-    // Base de datos de publicidad corregida
-    const adsDB = [
-        { src: "images/banner1.png", title: "ADIDAS 2026", desc: "Velocidad y Estilo" },
-        { src: "images/banner2.png", title: "PUMA FERRARI", desc: "Edición Limitada" },
-        { src: "images/banner3.png", title: "ULTRA RUNNING", desc: "Siente el Poder" },
-        { src: "images/001_In_a_dynamic_athletic_style_a_young_man_with_yKmglmUP.jpg", title: "PRO TRAINING", desc: "Nivel Profesional" },
-        { src: "images/001_In_a_gritty_realistic_style_a_man_with_dark_Xvlo_ft5.jpg", title: "URBAN STYLE", desc: "Moda de Calle" },
-        { src: "images/002_In_a_commercial_photography_style_a_woman_with_sZXvTv71.jpg", title: "VERANO ACTIVO", desc: "Colección Nueva" }
-    ];
-
-    function fillBanners() {
-        const left = document.getElementById('left-scroll-container');
-        const bottom = document.getElementById('bottom-scroll-container');
-        let leftHTML = ""; let bottomHTML = "";
-
-        adsDB.forEach(ad => {
-            leftHTML += `
-                <div class="ad-box">
-                    <img src="${ad.src}" onerror="this.src='https://placehold.co/280x380?text=${ad.title}'">
-                    <div class="ad-content">
-                        <div class="ad-title">${ad.title}</div>
-                        <div class="ad-desc">${ad.desc}</div>
-                    </div>
-                </div>`;
-
-            bottomHTML += `
-                <div class="bottom-ad-item">
-                    <img src="${ad.src}" onerror="this.src='https://placehold.co/100x50?text=Ad'">
-                    <span>${ad.title}: ${ad.desc}</span>
-                </div>`;
+    function fillAds() {
+        const imagesDB = [{ src: "images/banner1.png" }, { src: "images/banner2.png" }, { src: "images/banner3.png" }];
+        const cont = document.getElementById('left-ads'), btm = document.getElementById('bottom-ads');
+        let html = "", bhtml = "";
+        imagesDB.forEach(ad => {
+            html += `<div class="ad-box"><img src="${ad.src}"></div>`;
+            bhtml += `<img src="${ad.src}">`;
         });
-
-        left.innerHTML = leftHTML + leftHTML;
-        bottom.innerHTML = bottomHTML + bottomHTML;
+        cont.innerHTML = html + html;
+        btm.innerHTML = bhtml + bhtml + bhtml;
     }
 
     async function updateNews() {
@@ -171,56 +146,54 @@
             const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://www.marca.com/rss/futbol.xml")}`);
             const data = await res.json();
             if (data.status === 'ok') {
-                document.getElementById('live-ticker').innerText = data.items.map(item => `⭐ ${item.title.toUpperCase()}`).join(" --- ") + " --- TINO TV MASTER: CALIDAD PREMIUN --- ";
+                document.getElementById('live-ticker').innerText = data.items.map(item => `⭐ ${item.title.toUpperCase()}`).join(" --- ");
             }
-        } catch (e) {
-            document.getElementById('live-ticker').innerText = "⚽ BIENVENIDO A TINO TV MASTER - DISFRUTA DE LOS MEJORES EVENTOS DEPORTIVOS DEL MUNDO --";
-        }
+        } catch (e) { document.getElementById('live-ticker').innerText = "⚽ BIENVENIDO A TINO TV MASTER --- "; }
     }
 
-    function init() {
-        fillBanners();
-        render(KSD_CHANNELS);
-        updateNews();
-        setInterval(switchRightVideo, 12000); // Transición de video cada 12s
-        setInterval(updateNews, 600000); // Noticias cada 10 min
-    }
-
-    function switchRightVideo() {
-        const v1 = document.getElementById('tv-vid1'), v2 = document.getElementById('tv-vid2');
+    function switchVideo() {
+        const v1 = document.getElementById('v1'), v2 = document.getElementById('v2');
         if(v1.classList.contains('active')) { v1.classList.remove('active'); v2.classList.add('active'); v2.play(); }
         else { v2.classList.remove('active'); v1.classList.add('active'); v1.play(); }
     }
 
-    function render(db) {
-        const container = document.getElementById('main-grid');
-        container.innerHTML = "";
-        const cats = [...new Set(db.map(c => c.cat))];
-        cats.forEach(cat => {
-            const h3 = document.createElement('h3'); h3.className = 'cat-name'; h3.innerText = cat;
-            const grid = document.createElement('div'); grid.className = 'channels-grid';
-            db.filter(c => c.cat === cat).forEach(canal => {
-                const card = document.createElement('button');
-                card.className = 'channel-card';
-                card.onclick = () => {
-                    currentUrl = canal.source === "cablevision" ? `https://www.cablevisionhd.com/${canal.id}-en-vivo.php` : `https://streamx550.com/global1.php?channel=${canal.id}`;
-                    document.getElementById('tv-frame').src = 'about:blank';
-                    document.getElementById('tv-shield').style.display = 'flex';
-                    document.getElementById('btn-focus').focus();
-                    document.getElementById('tv-scroll').scrollTo({ top: 0, behavior: 'smooth' });
-                };
-                card.innerHTML = `<div style="font-size:24px">📺</div><div style="font-size:9px;font-weight:700;margin-top:5px;">${canal.name}</div>`;
-                grid.appendChild(card);
-            });
-            container.appendChild(h3); container.appendChild(grid);
+    function populateSelects(db) {
+        const sDep = document.getElementById('sel-deportes'), sTv = document.getElementById('sel-tv'), sCine = document.getElementById('sel-cine');
+
+        db.forEach(canal => {
+            const opt = document.createElement('option');
+            opt.value = `${canal.source}|${canal.id}`;
+            opt.innerText = canal.name;
+
+            if(canal.cat === "DEPORTES") sDep.appendChild(opt);
+            else if(canal.cat === "TV ABIERTA") sTv.appendChild(opt);
+            else if(canal.cat === "CINE") sCine.appendChild(opt);
         });
     }
 
-    function startChannel() {
-        if(currentUrl) { document.getElementById('tv-frame').src = currentUrl; document.getElementById('tv-shield').style.display = 'none'; }
+    function quickPlay(val) {
+        if(!val) return;
+        const [source, id] = val.split('|');
+        currentUrl = (source === "cablevision") ? `https://www.cablevisionhd.com/${id}-en-vivo.php` : `https://streamx550.com/global1.php?channel=${id}`;
+        document.getElementById('tv-frame').src = "";
+        document.getElementById('tv-shield').style.display = 'flex';
+        document.getElementById('btn-focus').focus();
     }
 
-    window.onload = init;
+    function startChannel() {
+        if(currentUrl) {
+            document.getElementById('tv-frame').src = currentUrl;
+            document.getElementById('tv-shield').style.display = 'none';
+        }
+    }
+
+    window.onload = () => {
+        fillAds();
+        populateSelects(KSD_CHANNELS);
+        updateNews();
+        setInterval(updateNews, 900000);
+        setInterval(switchVideo, 12000);
+    };
 </script>
 </body>
 </html>
