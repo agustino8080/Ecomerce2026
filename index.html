@@ -166,4 +166,20 @@
                     document.getElementById('btn-focus').focus();
                     document.getElementById('tv-scroll').scrollTo({ top: 0, behavior: 'smooth' });
                 };
-                card.innerHTML = `<div style="font-size:24px">🎬</div><
+                card.innerHTML = `<div style="font-size:24px">🎬</div><div style="font-size:9px;font-weight:700;margin-top:5px;">${canal.name}</div>`;
+                grid.appendChild(card);
+            });
+            container.appendChild(h3); container.appendChild(grid);
+        });
+    }
+
+    function startChannel() {
+        if(!currentUrl) return;
+        document.getElementById('tv-frame').src = currentUrl;
+        document.getElementById('tv-shield').style.display = 'none';
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
