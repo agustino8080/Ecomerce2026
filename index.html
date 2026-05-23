@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO - TV Masking Edition v6.0</title>
+    <title>TINO TV MASTER PRO - Live News Edition</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
@@ -14,62 +14,49 @@
 
         .layout-container { display: flex; width: 100vw; min-height: 100vh; }
 
-        /* BANNERS LATERALES (Solo visibles en PC) */
-        .side-banner { width: 200px; background: #000; overflow: hidden; border-right: 1px solid #1a1a1a; cursor: pointer; }
+        /* BANNERS LATERALES */
+        .side-banner { width: 220px; background: #000; overflow: hidden; border-right: 1px solid #1a1a1a; cursor: pointer; }
         .image-scroll { display: flex; flex-direction: column; animation: scroll-up 40s linear infinite; }
         .image-scroll img { width: 100%; border-bottom: 2px solid var(--neon); }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
-        /* CONTENEDOR PRINCIPAL */
         .app-shell { flex: 1; display: flex; flex-direction: column; background: #000; }
 
-        /* --- SISTEMA DE MASCARAS PARA ANDROID TV --- */
-        .player-wrapper {
-            width: 100%;
-            aspect-ratio: 16/9;
-            position: relative;
-            background: #000;
-            overflow: hidden;
-            border-bottom: 2px solid var(--neon);
-        }
+        /* --- MASCARAS DINÁMICAS --- */
+        .player-wrapper { width: 100%; aspect-ratio: 16/9; position: relative; background: #000; overflow: hidden; border-bottom: 2px solid var(--neon); }
 
-        /* 1. MÁSCARA SUPERIOR (Tapa Logo Original y Titulo) */
+        /* Ticker Automático Superior */
         .mask-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 50px;
             background: #000; z-index: 100; display: flex; align-items: center;
             border-bottom: 1px solid var(--neon); overflow: hidden;
         }
-        .ticker { white-space: nowrap; font-size: 14px; font-weight: 900; color: var(--neon); animation: ticker-move 30s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        /* 2. MÁSCARA DERECHA (Tapa el Chat) */
-        .mask-right {
-            position: absolute; top: 50px; right: 0; width: 28%; height: calc(100% - 100px);
-            background: #000; z-index: 100; border-left: 1px solid #222;
+        .ticker-wrap { width: 100%; overflow: hidden; }
+        .ticker {
+            white-space: nowrap; font-size: 14px; font-weight: 900; color: var(--neon);
+            display: inline-block; animation: ticker-move 40s linear infinite;
         }
+        @keyframes ticker-move { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+
+        /* Tapa Chat Derecha */
+        .mask-right { position: absolute; top: 50px; right: 0; width: 28%; height: calc(100% - 100px); background: #000; z-index: 100; border-left: 1px solid #222; }
         .mask-right video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; position: absolute; }
         .mask-right video.active { opacity: 1; }
 
-        /* 3. MÁSCARA INFERIOR (Tapa Redes Sociales) */
-        .mask-bottom {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 50px;
-            background: #000; z-index: 100; border-top: 1px solid var(--neon);
-            display: flex; overflow: hidden;
-        }
+        /* Tapa Redes Inferior */
+        .mask-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: #000; z-index: 100; border-top: 1px solid var(--neon); display: flex; overflow: hidden; }
         .mask-bottom-scroll { display: flex; animation: scroll-x 20s linear infinite; height: 100%; }
         .mask-bottom-scroll img { height: 100%; width: auto; padding: 5px; }
         @keyframes scroll-x { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* IFRAME AL FONDO */
-        iframe { width: 100%; height: 100%; border: none; position: relative; z-index: 1; }
+        iframe { width: 100%; height: 100%; border: none; }
 
-        /* BOTÓN REPRODUCIR TV */
         .tv-trigger { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 500; display: flex; justify-content: center; align-items: center; }
         .btn-play { background: var(--neon); color: #000; border: none; padding: 20px 40px; border-radius: 10px; font-weight: 900; font-size: 20px; cursor: pointer; }
 
         .container { padding: 20px; }
-        .cat-name { font-size: 11px; font-weight: 900; color: var(--gray); margin: 20px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--neon); padding-left: 10px; }
-        .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .cat-name { font-size: 12px; font-weight: 900; color: var(--gray); margin: 25px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--neon); padding-left: 10px; }
+        .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
         .channel-card { background: var(--card); border: 2px solid #1a1a1a; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; color: #fff; }
         .channel-card:focus { border-color: var(--neon); background: #1a1a20; outline: none; transform: scale(1.05); }
 
@@ -79,7 +66,7 @@
 <body>
 
 <div class="layout-container">
-    <div class="side-banner" onclick="window.open('https://sportivo.whacka.app/', '_blank')">
+    <div class="side-banner">
         <div class="image-scroll">
             <img src="images/banner1.png"><img src="images/banner2.png"><img src="images/banner3.png">
             <img src="images/banner1.png"><img src="images/banner2.png">
@@ -89,14 +76,14 @@
     <div class="app-shell" id="tv-scroll">
         <header>
             <div class="logo">TINO TV MASTER</div>
-            <div style="color: var(--neon); font-size: 10px; font-weight: 900;">TV MODE ACTIVE</div>
+            <div id="news-status" style="color: #444; font-size: 9px;">CONECTANDO NOTICIAS...</div>
         </header>
 
         <div class="player-wrapper">
-            <!-- MASCARAS DE COBERTURA -->
             <div class="mask-top">
-                <div class="ticker">
-                    ⚽ ÚLTIMA HORA: EL MERCADO DE FICHAJES SE MUEVE EN EUROPA -- 🏀 NBA: THUNDER DOMINA LA CONFERENCIA OESTE -- 🏁 F1: GRAN PREMIO DE CANADÁ ESTE FIN DE SEMANA -- 📺 DISFRUTA DE LA MEJOR PROGRAMACIÓN EN TINO TV MASTER --
+                <div class="ticker-wrap">
+                    <!-- AQUÍ SE INYECTAN LAS NOTICIAS AUTOMÁTICAS -->
+                    <div class="ticker" id="live-ticker">CARGANDO ÚLTIMAS NOTICIAS DEPORTIVAS...</div>
                 </div>
             </div>
 
@@ -108,7 +95,7 @@
             <div class="mask-bottom">
                 <div class="mask-bottom-scroll">
                     <img src="images/banner1.png"><img src="images/banner2.png"><img src="images/banner3.png">
-                    <img src="images/banner1.png"><img src="images/banner2.png"><img src="images/banner3.png">
+                    <img src="images/banner1.png"><img src="images/banner2.png">
                 </div>
             </div>
 
@@ -116,7 +103,7 @@
                 <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ REPRODUCIR CANAL</button>
             </div>
 
-            <iframe id="tv-frame" src="about:blank" allowfullscreen allow="autoplay" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            <iframe id="tv-frame" src="about:blank" allowfullscreen allow="autoplay"></iframe>
         </div>
 
         <div class="container" id="main-grid"></div>
@@ -127,19 +114,39 @@
 <script>
     let currentUrl = "";
 
+    async function updateNews() {
+        const ticker = document.getElementById('live-ticker');
+        const status = document.getElementById('news-status');
+
+        try {
+            // Fuente: RSS de noticias deportivas convertido a JSON
+            const rssUrl = "https://www.marca.com/rss/futbol.xml";
+            const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            const res = await fetch(api);
+            const data = await res.json();
+
+            if (data.status === 'ok') {
+                const headlines = data.items.map(item => `⚽ ${item.title.toUpperCase()}`).join(" --- ");
+                ticker.innerText = headlines + " --- DISFRUTA DE TINO TV MASTER --- ";
+                status.innerText = "NOTICIAS ACTUALIZADAS ✅";
+            }
+        } catch (e) {
+            ticker.innerText = "⚽ BIENVENIDO A TINO TV MASTER - DISFRUTA DE LA MEJOR PROGRAMACIÓN DEPORTIVA --";
+        }
+    }
+
     function init() {
         render(KSD_CHANNELS);
+        updateNews();
+        setInterval(updateNews, 900000); // Actualiza cada 15 minutos
         setInterval(switchRightVideo, 10000);
     }
 
     function switchRightVideo() {
-        const v1 = document.getElementById('tv-vid1');
-        const v2 = document.getElementById('tv-vid2');
-        if(v1.classList.contains('active')) {
-            v1.classList.remove('active'); v2.classList.add('active'); v2.play();
-        } else {
-            v2.classList.remove('active'); v1.classList.add('active'); v1.play();
-        }
+        const v1 = document.getElementById('tv-vid1'), v2 = document.getElementById('tv-vid2');
+        if(v1.classList.contains('active')) { v1.classList.remove('active'); v2.classList.add('active'); v2.play(); }
+        else { v2.classList.remove('active'); v1.classList.add('active'); v1.play(); }
     }
 
     function render(db) {
@@ -159,20 +166,4 @@
                     document.getElementById('btn-focus').focus();
                     document.getElementById('tv-scroll').scrollTo({ top: 0, behavior: 'smooth' });
                 };
-                card.innerHTML = `<div style="font-size:24px">🎬</div><div style="font-size:9px;font-weight:700;margin-top:5px;">${canal.name}</div>`;
-                grid.appendChild(card);
-            });
-            container.appendChild(h3); container.appendChild(grid);
-        });
-    }
-
-    function startChannel() {
-        if(!currentUrl) return;
-        document.getElementById('tv-frame').src = currentUrl;
-        document.getElementById('tv-shield').style.display = 'none';
-    }
-
-    window.onload = init;
-</script>
-</body>
-</html>
+                card.innerHTML = `<div style="font-size:24px">🎬</div><
