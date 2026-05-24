@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO v9.7 - Minimal Select</title>
+    <title>TINO TV MASTER PRO v9.9 - Master Clean</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
@@ -16,39 +16,38 @@
         .layout-container { display: grid; grid-template-columns: 20% 80%; width: 100%; height: 100%; }
 
         /* BANNER IZQUIERDO */
-        .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; cursor: pointer; }
+        .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; cursor: pointer; position: sticky; top: 0; }
         .image-scroll { display: flex; flex-direction: column; animation: scroll-up 60s linear infinite; }
         .ad-box { position: relative; width: 100%; border-bottom: 2px solid var(--neon); }
         .ad-box img { width: 100%; height: auto; display: block; }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
-        /* CUERPO APP */
-        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; }
+        /* APP SHELL */
+        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; overflow-y: auto; }
 
         header {
             padding: 15px 20px; background: #000; border-bottom: 1px solid #1a1a1a;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 2000;
+            position: sticky; top: 0; z-index: 2000;
         }
-        .logo-area { display: flex; flex-direction: column; }
         .logo { font-size: 18px; font-weight: 900; color: var(--neon); text-transform: uppercase; }
 
-        /* SELECTORES RÁPIDOS */
-        .nav-controls { display: flex; gap: 15px; align-items: center; }
+        .nav-controls { display: flex; gap: 10px; }
         .tv-select {
             background: #111; color: #fff; border: 1px solid #333;
-            padding: 10px 15px; border-radius: 8px; font-size: 11px; font-weight: 900;
-            outline: none; cursor: pointer; transition: 0.3s; width: 150px;
+            padding: 8px 12px; border-radius: 6px; font-size: 10px; font-weight: bold;
+            outline: none; cursor: pointer;
         }
-        .tv-select:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0,255,204,0.3); }
 
-        /* REPRODUCTOR */
+        /* REPRODUCTOR ESTABLE SIN DISTORSIÓN */
         .player-wrapper {
-            flex: 1; /* Ocupa todo el espacio vertical disponible */
             width: 100%;
+            aspect-ratio: 16/9;
             position: relative;
             background: #000;
             overflow: hidden;
+            border-bottom: 2px solid var(--neon);
+            flex-shrink: 0; /* Evita que el video se encoja o estire */
         }
 
         /* MASCARAS */
@@ -67,61 +66,57 @@
 
         iframe { width: 100%; height: 100%; border: none; background: #000; }
         .tv-trigger { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .btn-play { background: var(--neon); color: #000; border: none; padding: 25px 60px; border-radius: 12px; font-weight: 900; font-size: 24px; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
+        .btn-play { background: var(--neon); color: #000; border: none; padding: 20px 50px; border-radius: 12px; font-weight: 900; font-size: 22px; cursor: pointer; }
 
-        @media (max-width: 900px) { .side-banner, .mask-right-video, .nav-controls { display: none; } }
+        /* FOOTER LIGERO */
+        footer {
+            padding: 20px;
+            text-align: center;
+            background: #000;
+            color: #333;
+            font-size: 10px;
+            font-weight: bold;
+            border-top: 1px solid #111;
+            margin-top: auto;
+        }
+        footer span { color: var(--neon); }
+
+        @media (max-width: 900px) { .side-banner, .mask-right-video { display: none; } .layout-container { grid-template-columns: 100%; } }
     </style>
 </head>
 <body>
 
 <div class="layout-container">
-    <!-- BANNER IZQUIERDO -->
     <div class="side-banner">
         <div class="image-scroll" id="left-ads"></div>
     </div>
 
-    <div class="app-shell">
+    <div class="app-shell" id="app-viewport">
         <header>
-            <div class="logo-area">
-                <div class="logo">TINO TV MASTER</div>
-                <div style="font-size: 8px; color: #00ffcc; font-weight: 900; border: 1px solid #00ffcc; padding: 2px 5px; border-radius: 4px; display: inline-block; margin-top: 2px;">SECURE PLAYER ✅</div>
-            </div>
-
-            <!-- SELECTORES EXCLUSIVOS -->
+            <div class="logo">TINO TV MASTER</div>
             <div class="nav-controls">
-                <select class="tv-select" id="sel-deportes" onchange="quickPlay(this.value)">
-                    <option value="">⚽ DEPORTES</option>
-                </select>
-                <select class="tv-select" id="sel-tv" onchange="quickPlay(this.value)">
-                    <option value="">📺 TV ABIERTA</option>
-                </select>
-                <select class="tv-select" id="sel-cine" onchange="quickPlay(this.value)">
-                    <option value="">🎬 CINE</option>
-                </select>
+                <select class="tv-select" id="sel-deportes" onchange="quickPlay(this.value)"><option value="">⚽ DEPORTES</option></select>
+                <select class="tv-select" id="sel-tv" onchange="quickPlay(this.value)"><option value="">📺 TV ABIERTA</option></select>
+                <select class="tv-select" id="sel-cine" onchange="quickPlay(this.value)"><option value="">🎬 CINE</option></select>
             </div>
         </header>
 
         <div class="player-wrapper">
-            <!-- MASCARAS PROTECTORAS -->
             <div class="mask-top"><div class="ticker" id="live-ticker">CONECTANDO NOTICIAS EN VIVO...</div></div>
             <div class="mask-right-video">
                 <video id="v1" autoplay muted loop playsinline class="active"><source src="images/banner_video.mp4"></video>
                 <video id="v2" muted loop playsinline><source src="images/banner_video2.mp4"></video>
             </div>
             <div class="mask-bottom"><div class="bottom-scroll" id="bottom-ads"></div></div>
-
-            <!-- DISPARADOR DE SEÑAL -->
             <div id="tv-shield" class="tv-trigger">
                 <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ CONECTAR SEÑAL</button>
-                <p style="font-size: 11px; color: #666; margin-top: 15px; font-weight: bold;">PROTECCIÓN ANTI-POPUPS ACTIVA</p>
             </div>
-
-            <iframe id="tv-frame" src=""
-                    allowfullscreen
-                    allow="autoplay; encrypted-media"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-presentation">
-            </iframe>
+            <iframe id="tv-frame" src="" allowfullscreen allow="autoplay"></iframe>
         </div>
+
+        <footer>
+            &copy; 2026 - <span>Agustín Pizarro</span>. Todos los derechos reservados.
+        </footer>
     </div>
 </div>
 
@@ -134,21 +129,11 @@
         const cont = document.getElementById('left-ads'), btm = document.getElementById('bottom-ads');
         let html = "", bhtml = "";
         imagesDB.forEach(ad => {
-            html += `<div class="ad-box"><img src="${ad.src}"></div>`;
-            bhtml += `<img src="${ad.src}">`;
+            html += `<div class="ad-box"><img src="${ad.src}" onerror="this.src='${ad.src.replace('images/','imágenes/')}'"></div>`;
+            bhtml += `<img src="${ad.src}" onerror="this.src='${ad.src.replace('images/','imágenes/')}'">`;
         });
         cont.innerHTML = html + html;
         btm.innerHTML = bhtml + bhtml + bhtml;
-    }
-
-    async function updateNews() {
-        try {
-            const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://www.marca.com/rss/futbol.xml")}`);
-            const data = await res.json();
-            if (data.status === 'ok') {
-                document.getElementById('live-ticker').innerText = data.items.map(item => `⭐ ${item.title.toUpperCase()}`).join(" --- ");
-            }
-        } catch (e) { document.getElementById('live-ticker').innerText = "⚽ BIENVENIDO A TINO TV MASTER --- "; }
     }
 
     function switchVideo() {
@@ -157,14 +142,22 @@
         else { v2.classList.remove('active'); v1.classList.add('active'); v1.play(); }
     }
 
+    async function updateNews() {
+        try {
+            const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://www.marca.com/rss/futbol.xml")}`);
+            const data = await res.json();
+            if (data.status === 'ok') {
+                document.getElementById('live-ticker').innerText = data.items.map(item => `⚽ ${item.title.toUpperCase()}`).join(" --- ");
+            }
+        } catch (e) { document.getElementById('live-ticker').innerText = "⚽ BIENVENIDO A TINO TV MASTER --- "; }
+    }
+
     function populateSelects(db) {
         const sDep = document.getElementById('sel-deportes'), sTv = document.getElementById('sel-tv'), sCine = document.getElementById('sel-cine');
-
         db.forEach(canal => {
             const opt = document.createElement('option');
             opt.value = `${canal.source}|${canal.id}`;
             opt.innerText = canal.name;
-
             if(canal.cat === "DEPORTES") sDep.appendChild(opt);
             else if(canal.cat === "TV ABIERTA") sTv.appendChild(opt);
             else if(canal.cat === "CINE") sCine.appendChild(opt);
@@ -181,10 +174,7 @@
     }
 
     function startChannel() {
-        if(currentUrl) {
-            document.getElementById('tv-frame').src = currentUrl;
-            document.getElementById('tv-shield').style.display = 'none';
-        }
+        if(currentUrl) { document.getElementById('tv-frame').src = currentUrl; document.getElementById('tv-shield').style.display = 'none'; }
     }
 
     window.onload = () => {
