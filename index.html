@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO v10.1 - Path Master</title>
+    <title>TINO TV MASTER PRO v10.2 - Multi-Format Fix</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
@@ -13,34 +13,24 @@
 
         html, body { background: #000; color: #fff; width: 100vw; height: 100vh; overflow: hidden; }
 
-        /* DISEÑO DE REJILLA FIJA PARA EVITAR ZOOM */
-        .layout-container {
-            display: grid;
-            grid-template-columns: 220px 1fr; /* Ancho fijo para banner, el resto para el video */
-            width: 100%;
-            height: 100%;
-        }
+        .layout-container { display: grid; grid-template-columns: 240px 1fr; width: 100%; height: 100%; }
 
         /* BANNER IZQUIERDO */
-        .side-banner {
-            background: #000; border-right: 1px solid #1a1a1a;
-            overflow: hidden; height: 100vh; cursor: pointer;
-        }
-        .image-scroll { display: flex; flex-direction: column; animation: scroll-up 60s linear infinite; }
+        .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; cursor: pointer; }
+        .image-scroll { display: flex; flex-direction: column; animation: scroll-up 70s linear infinite; }
         .ad-box { position: relative; width: 100%; border-bottom: 2px solid var(--neon); background: #050505; }
-        .ad-box img { width: 100%; height: auto; display: block; min-height: 150px; }
-        .ad-text { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); padding: 10px; font-size: 11px; color: var(--neon); font-weight: 900; text-align: center; }
+        .ad-box img { width: 100%; height: 350px; object-fit: cover; display: block; }
+        .ad-text { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); padding: 12px; font-size: 11px; color: var(--neon); font-weight: 900; text-align: center; text-transform: uppercase; }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
-        /* CUERPO APP */
+        /* APP SHELL */
         .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; overflow-y: auto; }
 
         header { padding: 12px 20px; background: #000; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 2000; }
         .logo { font-size: 18px; font-weight: 900; color: var(--neon); text-transform: uppercase; }
-        .nav-controls { display: flex; gap: 8px; }
-        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 6px; font-size: 10px; font-weight: bold; outline: none; cursor: pointer; }
+        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 6px; font-size: 10px; font-weight: bold; outline: none; cursor: pointer; }
 
-        /* REPRODUCTOR ESTABLE SIN DISTORSIÓN */
+        /* REPRODUCTOR */
         .player-wrapper {
             width: 100%; aspect-ratio: 16/9; position: relative;
             background: #000; overflow: hidden; border-bottom: 2px solid var(--neon);
@@ -56,20 +46,15 @@
         .mask-right-video video.active { opacity: 1; }
 
         .mask-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 100; border-top: 1px solid var(--neon); overflow: hidden; }
-        .bottom-scroll { display: flex; animation: scroll-x 25s linear infinite; height: 100%; }
-        .bottom-scroll img { height: 100%; padding: 5px; }
+        .bottom-scroll { display: flex; animation: scroll-x 30s linear infinite; height: 100%; }
+        .bottom-scroll img { height: 100%; width: auto; padding: 5px; }
         @keyframes scroll-x { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         iframe { width: 100%; height: 100%; border: none; background: #000; }
-        .tv-trigger { position: absolute; inset: 0; background: rgba(0,0,0,0.95); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .btn-play { background: var(--neon); color: #000; border: none; padding: 20px 50px; border-radius: 12px; font-weight: 900; font-size: 22px; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
+        .tv-trigger { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        .btn-play { background: var(--neon); color: #000; border: none; padding: 22px 55px; border-radius: 12px; font-weight: 900; font-size: 24px; cursor: pointer; box-shadow: 0 0 40px rgba(0,255,204,0.4); }
 
-        /* FOOTER COPYRIGHT */
-        footer {
-            padding: 20px; text-align: center; background: #000;
-            color: #444; font-size: 11px; font-weight: bold;
-            border-top: 1px solid #111; margin-top: auto;
-        }
+        footer { padding: 25px; text-align: center; color: #444; font-size: 11px; font-weight: bold; border-top: 1px solid #111; margin-top: auto; }
 
         @media (max-width: 900px) { .layout-container { grid-template-columns: 100%; } .side-banner, .mask-right-video { display: none; } }
     </style>
@@ -84,7 +69,7 @@
     <div class="app-shell" id="app-viewport">
         <header>
             <div class="logo">TINO TV MASTER</div>
-            <div class="nav-controls">
+            <div style="display:flex; gap:8px;">
                 <select class="tv-select" id="sel-deportes" onchange="quickPlay(this.value)"><option value="">⚽ DEPORTES</option></select>
                 <select class="tv-select" id="sel-tv" onchange="quickPlay(this.value)"><option value="">📺 TV ABIERTA</option></select>
                 <select class="tv-select" id="sel-cine" onchange="quickPlay(this.value)"><option value="">🎬 CINE</option></select>
@@ -104,9 +89,7 @@
             <iframe id="tv-frame" src="" allowfullscreen allow="autoplay"></iframe>
         </div>
 
-        <footer>
-            © 2026 - Agustín Pizarro. Todos los derechos reservados.
-        </footer>
+        <footer>© 2026 - Agustín Pizarro. Todos los derechos reservados.</footer>
     </div>
 </div>
 
@@ -115,16 +98,26 @@
     let currentUrl = "";
 
     function fillAds() {
-        const files = ["banner1.png", "banner2.png", "banner3.png"];
+        // Lista completa de tus archivos según el servidor
+        const files = [
+            "banner1.png", "banner2.png", "banner3.png",
+            "001_In_a_dynamic_athletic_style_a_young_man_with_yKmglmUP.jpg",
+            "001_In_a_dynamic_low-angle_shot_a_man_dribbles_a_N2rUeF0y.jpg",
+            "002_In_a_commercial_photography_style_a_woman_with_sZXvTv71.jpg",
+            "003_In_a_studio_style_a_man_sits_with_his_legs_esx8VLC6.jpg",
+            "004_In_a_dynamic_promotional_style_a_man_with_dark_UDTszEb2.jpg"
+        ];
+
         const left = document.getElementById('left-ads'), btm = document.getElementById('bottom-ads');
         let lHtml = "", bHtml = "";
 
         files.forEach(f => {
             // Lógica Multi-Ruta: Prueba images/, imágenes/ y raíz
-            const imgTag = `<img src="images/${f}" crossorigin="anonymous" onerror="this.onerror=null; this.src='im%C3%A1genes/${f}'; this.onerror=function(){this.src='./${f}';};">`;
-            lHtml += `<div class="ad-box">${imgTag}<div class="ad-text">OFERTA</div></div>`;
+            const imgTag = `<img src="images/${f}" onerror="this.onerror=null; this.src='im%C3%A1genes/${f}'; this.onerror=function(){this.src='./${f}';};">`;
+            lHtml += `<div class="ad-box">${imgTag}<div class="ad-text">COMPRA AHORA</div></div>`;
             bHtml += imgTag;
         });
+
         left.innerHTML = lHtml + lHtml;
         btm.innerHTML = bHtml + bHtml + bHtml;
     }
