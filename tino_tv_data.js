@@ -1,4 +1,3 @@
-// BASE DE DATOS MAESTRA - TINO TV CLONE v1.0
 const KSD_CHANNELS = [
     // DEPORTES
     { id: "tudn", name: "TUDN", cat: "DEPORTES", source: "cablevision" },
@@ -37,21 +36,56 @@ const KSD_CHANNELS = [
     { id: "telefe", name: "TELEFE", cat: "TV ABIERTA", source: "cablevision" },
     { id: "el-trece", name: "EL TRECE", cat: "TV ABIERTA", source: "cablevision" },
     { id: "telemundo-51", name: "TELEMUNDO 51", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "telemundo-puerto-rico", name: "TELEMUNDO PUERTO RICO", cat: "TV ABIERTA", source: "cablevision" },
     { id: "univision", name: "UNIVISION", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "pasiones", name: "PASIONES", cat: "TV ABIERTA", source: "cablevision" },
     { id: "caracol", name: "CARACOL", cat: "TV ABIERTA", source: "cablevision" },
     { id: "rcn", name: "RCN", cat: "TV ABIERTA", source: "cablevision" },
-    { id: "ecuavisa", name: "ECUAVISA", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "latina", name: "LATINA", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "america-tv", name: "AMERICA TV", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "atv", name: "ATV", cat: "TV ABIERTA", source: "cablevision" },
     { id: "las-estrellas", name: "LAS ESTRELLAS", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "tlnovelas", name: "TLNOVELAS", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "galavision", name: "GALAVISION", cat: "TV ABIERTA", source: "cablevision" },
     { id: "azteca-7", name: "AZTECA 7", cat: "TV ABIERTA", source: "cablevision" },
+    { id: "azteca-uno", name: "AZTECA UNO", cat: "TV ABIERTA", source: "cablevision" },
     { id: "canal-5", name: "CANAL 5", cat: "TV ABIERTA", source: "cablevision" },
 
+    // INFANTIL
+    { id: "cartoon-network", name: "CARTOON NETWORK", cat: "INFANTIL", source: "cablevision" },
+    { id: "tooncast", name: "TOONCAST", cat: "INFANTIL", source: "cablevision" },
+    { id: "disney-channel", name: "DISNEY CHANNEL", cat: "INFANTIL", source: "cablevision" },
+    { id: "nick", name: "NICK", cat: "INFANTIL", source: "cablevision" },
+
+    // CULTURA
+    { id: "discovery-channel", name: "DISCOVERY CHANNEL", cat: "CULTURA", source: "cablevision" },
+    { id: "history", name: "HISTORY", cat: "CULTURA", source: "cablevision" },
+    { id: "history-2", name: "HISTORY 2", cat: "CULTURA", source: "cablevision" },
+    { id: "animal-planet", name: "ANIMAL PLANET", cat: "CULTURA", source: "cablevision" },
+    { id: "nat-geo", name: "NAT GEO", cat: "CULTURA", source: "cablevision" },
+    { id: "discovery-world", name: "DISCOVERY WORLD", cat: "CULTURA", source: "cablevision" },
+
     // CINE
-    { id: "star-channel", name: "STAR CHANNEL", cat: "CINE", source: "cablevision" },
-    { id: "hbo", name: "HBO", cat: "CINE", source: "cablevision" },
-    { id: "cinemax", name: "CINEMAX", cat: "CINE", source: "cablevision" },
+    { id: "universal-channel", name: "UNIVERSAL CHANNEL", cat: "CINE", source: "cablevision" },
     { id: "tnt", name: "TNT", cat: "CINE", source: "cablevision" },
+    { id: "tnt-series", name: "TNT SERIES", cat: "CINE", source: "cablevision" },
+    { id: "star-channel", name: "STAR CHANNEL", cat: "CINE", source: "cablevision" },
+    { id: "cinemax", name: "CINEMAX", cat: "CINE", source: "cablevision" },
     { id: "space", name: "SPACE", cat: "CINE", source: "cablevision" },
-    { id: "warner-channel", name: "WARNER CHANNEL", cat: "CINE", source: "cablevision" },
+    { id: "syfy", name: "SYFY", cat: "CINE", source: "cablevision" },
+    { id: "warner-bros-tv", name: "WARNER CHANNEL", cat: "CINE", source: "cablevision" },
+    { id: "warner-bros-tv-mexico", name: "WARNER CHANNEL MX", cat: "CINE", source: "cablevision" },
+    { id: "cinecanal", name: "CINECANAL", cat: "CINE", source: "cablevision" },
+    { id: "fx", name: "FX", cat: "CINE", source: "cablevision" },
+    { id: "axn", name: "AXN", cat: "CINE", source: "cablevision" },
+    { id: "amc", name: "AMC", cat: "CINE", source: "cablevision" },
+    { id: "studio-universal", name: "STUDIO UNIVERSAL", cat: "CINE", source: "cablevision" },
+    { id: "golden-plus", name: "GOLDEN PLUS", cat: "CINE", source: "cablevision" },
+    { id: "golden-edge", name: "GOLDEN EDGE", cat: "CINE", source: "cablevision" },
+    { id: "golden-premier", name: "GOLDEN PREMIER", cat: "CINE", source: "cablevision" },
+    { id: "golden-premier-2", name: "GOLDEN PREMIER 2", cat: "CINE", source: "cablevision" },
     { id: "multipremier", name: "MULTIPREMIER", cat: "CINE", source: "cablevision" },
-    { id: "golden-premier", name: "GOLDEN PREMIER", cat: "CINE", source: "cablevision" }
+    { id: "canal-sony", name: "CANAL SONY", cat: "CINE", source: "cablevision" },
+    { id: "extrema-tv", name: "EXTREMA TV", cat: "CINE", source: "cablevision" },
+    { id: "distrito-comedia", name: "DISTRITO COMEDIA", cat: "CINE", source: "cablevision" }
 ];
