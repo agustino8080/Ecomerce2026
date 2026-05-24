@@ -2,70 +2,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO v11.8 - Android TV Fix</title>
+    <title>TINO TV MASTER PRO v11.9 - TV Legacy Stable</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        html, body { background: #000; color: #fff; width: 100vw; height: 100vh; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        html, body { background: #000; color: #fff; width: 100%; height: 100%; overflow: hidden; }
 
-        .layout-container { display: grid; grid-template-columns: 240px 1fr; width: 100%; height: 100%; }
+        .layout-container { display: grid; grid-template-columns: 220px 1fr; width: 100%; height: 100%; }
 
-        /* BANNER IZQUIERDO */
+        /* BANNER IZQUIERDO (v5.7 Style) */
         .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; cursor: pointer; }
         .image-scroll { display: flex; flex-direction: column; animation: scroll-up 60s linear infinite; }
-        .ad-box { position: relative; width: 100%; border-bottom: 2px solid var(--neon); background: #050505; }
-        .ad-box img { width: 100%; height: 350px; object-fit: cover; display: block; }
+        .ad-box { position: relative; width: 100%; border-bottom: 2px solid var(--neon); }
+        .ad-box img { width: 100%; height: auto; display: block; }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
         /* APP SHELL */
-        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; overflow-y: auto; }
-        header { padding: 15px 20px; background: #000; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 2000; }
+        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; }
+        header {
+            padding: 15px; background: #000; border-bottom: 1px solid #1a1a1a;
+            display: flex; justify-content: space-between; align-items: center;
+        }
         .logo { font-size: 18px; font-weight: 900; color: var(--neon); text-transform: uppercase; }
+        .nav-controls { display: flex; gap: 8px; }
+        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 5px; font-size: 11px; font-weight: bold; outline: none; cursor: pointer; }
 
-        .nav-controls { display: flex; gap: 10px; }
-        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 6px; font-size: 11px; font-weight: bold; outline: none; cursor: pointer; min-width: 130px; }
-
-        /* REPRODUCTOR MASTER */
+        /* REPRODUCTOR (Base de v5.7 / v7.2) */
         .player-wrapper {
             width: 100%; aspect-ratio: 16/9; position: relative;
             background: #000; overflow: hidden; border-bottom: 2px solid var(--neon);
-            flex-shrink: 0;
         }
-
-        /* REPRODUCTOR INTERNO CON ZOOM */
-        .player-inner {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            transition: all 0.4s ease-in-out;
-        }
-
-        .player-inner.isolation-mode {
-            width: 130%;
-            height: 155%;
-            transform: translate(-10%, -10%);
-        }
-
-        iframe { width: 100%; height: 100%; border: none; background: #000; }
 
         /* MASCARA SUPERIOR (RSS) */
         .mask-top { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 150; display: flex; align-items: center; border-bottom: 1px solid var(--neon); overflow: hidden; }
         .ticker { white-space: nowrap; font-size: 14px; font-weight: 900; color: var(--neon); display: inline-block; animation: ticker-move 45s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        @keyframes ticker-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* BOTÓN DISPARADOR */
+        /* REPRODUCTOR INTERNO CON RECORTE ESTÁTICO (Más estable para TV) */
+        .player-inner {
+            position: absolute;
+            top: -10%;  /* Esconde encabezado */
+            left: -10%; /* Esconde lateral izquierdo */
+            width: 135%; /* Zoom lateral para tapar el chat derecho */
+            height: 125%; /* Zoom vertical para ocultar abajo */
+            z-index: 1;
+        }
+        iframe { width: 100%; height: 100%; border: none; background: #000; }
+
+        /* DISPARADOR DE SEÑAL (Gatillo obligatorio en Android TV) */
         .tv-trigger { position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .btn-play { background: var(--neon); color: #000; border: none; padding: 25px 60px; border-radius: 12px; font-weight: 900; font-size: 24px; cursor: pointer; box-shadow: 0 0 40px rgba(0,255,204,0.4); }
+        .btn-play { background: var(--neon); color: #000; border: none; padding: 25px 60px; border-radius: 10px; font-weight: 900; font-size: 24px; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,204,0.4); }
 
-        footer { padding: 25px; text-align: center; color: #333; font-size: 11px; font-weight: bold; border-top: 1px solid #111; margin-top: auto; }
+        footer { padding: 15px; text-align: center; color: #444; font-size: 10px; font-weight: bold; border-top: 1px solid #111; margin-top: auto; }
 
-        @media (max-width: 900px) { .side-banner { display: none; } .layout-container { grid-template-columns: 100%; } .player-inner { width: 100%; height: 100%; transform: none; } }
+        @media (max-width: 900px) { .side-banner { display: none; } .layout-container { grid-template-columns: 100%; } }
     </style>
 </head>
 <body>
@@ -73,7 +68,7 @@
 <div class="layout-container">
     <div class="side-banner"><div class="image-scroll" id="left-ads"></div></div>
 
-    <div class="app-shell" id="app-viewport">
+    <div class="app-shell">
         <header>
             <div class="logo">TINO TV MASTER</div>
             <div class="nav-controls">
@@ -87,20 +82,15 @@
             <div class="mask-top"><div class="ticker" id="live-ticker">CONECTANDO NOTICIAS DEPORTIVAS EN VIVO...</div></div>
 
             <div id="tv-shield" class="tv-trigger">
-                <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ CONECTAR SEÑAL</button>
+                <button class="btn-play" id="btn-focus" onclick="startChannel()">▶ INICIAR CANAL</button>
             </div>
 
             <div class="player-inner" id="zoom-engine">
-                <!-- IFRAME OPTIMIZADO PARA ANDROID TV -->
-                <iframe id="tv-frame" src=""
-                        allowfullscreen
-                        allow="autoplay; encrypted-media; presentation"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-presentation">
-                </iframe>
+                <iframe id="tv-frame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
             </div>
         </div>
 
-        <footer>&copy; 2026 - Agustín Pizarro. Todos los derechos reservados.</footer>
+        <footer>© 2026 - Agustín Pizarro. Todos los derechos reservados.</footer>
     </div>
 </div>
 
@@ -110,11 +100,11 @@
 
     function fillAds() {
         const left = document.getElementById('left-ads');
-        let lHtml = "";
+        let html = "";
         for (let i = 1; i <= 17; i++) {
-            lHtml += `<div class="ad-box"><img src="images/banner${i}.png" onerror="this.src='im%C3%A1genes/banner${i}.png'"></div>`;
+            html += `<div class="ad-box"><img src="images/banner${i}.png" onerror="this.src='im%C3%A1genes/banner${i}.png'"></div>`;
         }
-        left.innerHTML = lHtml + lHtml;
+        left.innerHTML = html + html;
     }
 
     async function updateNews() {
@@ -144,13 +134,10 @@
 
         if (source === "cablevision") {
             currentUrl = `https://www.cablevisionhd.com/${id}-en-vivo.php`;
-            engine.classList.add('isolation-mode');
-        } else if (source === "ksd") {
-            currentUrl = `https://embed.ksdjugfsddeports.com/embed/${id}.html`;
-            engine.classList.remove('isolation-mode');
+            engine.style.display = "block"; // v5.7 Style logic
         } else {
-            currentUrl = `https://streamx550.com/global1.php?channel=${id}`;
-            engine.classList.remove('isolation-mode');
+            currentUrl = source === "ksd" ? `https://embed.ksdjugfsddeports.com/embed/${id}.html` : `https://streamx550.com/global1.php?channel=${id}`;
+            engine.style.display = "block";
         }
 
         document.getElementById('tv-frame').src = "";
