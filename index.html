@@ -6,60 +6,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ffcc">
-    <title>TINO TV MASTER PRO v12.0 - Absolute Stability</title>
+    <title>TINO TV MASTER PRO v12.3 - Keep Alive TV</title>
 
     <style>
         :root { --neon: #00ffcc; --bg: #000; --card: #121216; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        html, body { background: #000; color: #fff; width: 100%; height: 100%; overflow: hidden; }
+        body { background: #000; color: #fff; overflow-x: hidden; }
 
-        .layout-container { display: grid; grid-template-columns: 200px 1fr; width: 100%; height: 100%; }
+        .layout-container { display: flex; width: 100vw; min-height: 100vh; }
 
-        /* BANNERS */
-        .side-banner { background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; height: 100vh; }
+        .side-banner { width: 200px; background: #000; border-right: 1px solid #1a1a1a; overflow: hidden; position: sticky; top: 0; height: 100vh; flex-shrink: 0; }
         .image-scroll { display: flex; flex-direction: column; animation: scroll-up 60s linear infinite; }
         .ad-box { width: 100%; border-bottom: 2px solid var(--neon); }
         .ad-box img { width: 100%; height: auto; display: block; }
         @keyframes scroll-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
-        /* APP CORE */
-        .app-shell { display: flex; flex-direction: column; height: 100vh; background: #000; overflow-y: auto; }
+        .app-shell { flex: 1; display: flex; flex-direction: column; background: #000; overflow-y: auto; height: 100vh; }
+
         header {
-            padding: 10px 20px; background: #000; border-bottom: 1px solid #1a1a1a;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; background: #000; border-bottom: 1px solid #1a1a1a;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            position: sticky; top: 0; z-index: 2000;
         }
+        .logo-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
         .logo { font-size: 16px; font-weight: 900; color: var(--neon); text-transform: uppercase; }
 
-        /* SELECTORES CON BOTÓN (Garantiza funcionamiento en TV) */
-        .nav-controls { display: flex; gap: 5px; align-items: center; }
-        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 4px; font-size: 10px; outline: none; max-width: 110px; }
+        /* BOTÓN RECARGAR (Fix para los 20 min) */
+        .btn-refresh { background: #222; color: #fff; border: 1px solid #444; padding: 5px 12px; border-radius: 4px; font-size: 9px; cursor: pointer; font-weight: 900; }
+        .btn-refresh:hover { border-color: var(--neon); color: var(--neon); }
+
+        .nav-controls { display: flex; gap: 8px; justify-content: center; width: 100%; flex-wrap: wrap; }
+        .tv-select { background: #111; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 5px; font-size: 10px; outline: none; width: 105px; }
         .btn-go { background: var(--neon); color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 900; cursor: pointer; }
 
-        /* REPRODUCTOR ESTILO v5.7 */
         .player-wrapper {
-            width: 100%; aspect-ratio: 16/9; position: relative;
-            background: #080808; overflow: hidden; border-bottom: 2px solid var(--neon);
-            flex-shrink: 0;
+            width: 96%; margin: 10px auto; aspect-ratio: 16/9; position: relative;
+            background: #080808; overflow: hidden; border: 2px solid #1a1a1a;
+            border-radius: 10px; z-index: 10;
         }
-        .mask-top { position: absolute; top: 0; left: 0; width: 100%; height: 40px; background: #000; z-index: 100; display: flex; align-items: center; border-bottom: 1px solid var(--neon); overflow: hidden; }
-        .ticker { white-space: nowrap; font-size: 13px; font-weight: 900; color: var(--neon); display: inline-block; animation: ticker-move 40s linear infinite; }
+
+        .mask-top { position: absolute; top: 0; left: 0; width: 100%; height: 45px; background: #000; z-index: 150; display: flex; align-items: center; border-bottom: 1px solid var(--neon); overflow: hidden; }
+        .ticker { white-space: nowrap; font-size: 13px; font-weight: 900; color: var(--neon); display: inline-block; animation: ticker-move 45s linear infinite; }
         @keyframes ticker-move { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
-        .player-inner {
-            position: absolute;
-            top: -8%; left: -8%;
-            width: 125%; height: 125%;
-            z-index: 1;
-            transition: none; /* Eliminamos transiciones para evitar bugs en TV */
-        }
+        .player-inner { position: absolute; top: -8%; left: -8%; width: 125%; height: 125%; z-index: 1; }
         iframe { width: 100%; height: 100%; border: none; background: #000; }
 
-        /* BOTONES RÁPIDOS INFERIORES */
-        .quick-grid { padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
-        .q-card { background: var(--card); border: 1px solid #222; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 9px; color: #fff; }
-        .q-card:focus { border-color: var(--neon); background: #1a1a20; outline: none; transform: scale(1.05); }
+        .container { padding: 15px; }
+        .channels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+        .channel-card { background: var(--card); border: 2px solid #1a1a1a; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; color: #fff; transition: 0.3s; width: 100%; }
+        .channel-card:focus { border-color: var(--neon); background: #1a1a20; outline: none; transform: scale(1.05); }
 
-        footer { padding: 15px; text-align: center; color: #333; font-size: 10px; font-weight: bold; }
+        footer { padding: 40px 20px; text-align: center; color: #bbb; font-size: 11px; font-weight: bold; border-top: 1px solid #111; margin-top: auto; }
 
         @media (max-width: 900px) { .side-banner { display: none; } .layout-container { grid-template-columns: 100%; } }
     </style>
@@ -69,34 +67,38 @@
 <div class="layout-container">
     <div class="side-banner"><div class="image-scroll" id="left-ads"></div></div>
 
-    <div class="app-shell" id="tv-content">
+    <div class="app-shell" id="scroll-node">
         <header>
-            <div class="logo">TINO TV</div>
+            <div class="logo-row">
+                <div class="logo">TINO TV MASTER</div>
+                <button class="btn-refresh" onclick="refreshPlayer()">🔄 RECARGAR SEÑAL</button>
+            </div>
             <div class="nav-controls">
-                <select class="tv-select" id="sel-1"><option value="">⚽ DEPORTES</option></select>
-                <button class="btn-go" onclick="loadFromSelect('sel-1')">▶</button>
-                <select class="tv-select" id="sel-2"><option value="">📺 TV</option></select>
-                <button class="btn-go" onclick="loadFromSelect('sel-2')">▶</button>
+                <select class="tv-select" id="sel-dep"><option value="">⚽ DEPORTES</option></select>
+                <button class="btn-go" onclick="go('sel-dep')">▶</button>
+                <select class="tv-select" id="sel-tv"><option value="">📺 TV</option></select>
+                <button class="btn-go" onclick="go('sel-tv')">▶</button>
+                <select class="tv-select" id="sel-cine"><option value="">🎬 CINE</option></select>
+                <button class="btn-go" onclick="go('sel-cine')">▶</button>
             </div>
         </header>
 
         <div class="player-wrapper">
-            <div class="mask-top"><div class="ticker" id="live-ticker">BIENVENIDO A TINO TV MASTER - ELIGE UN CANAL Y PRESIONA PLAY...</div></div>
+            <div class="mask-top"><div class="ticker" id="live-ticker">DISFRUTA DE LA SEÑAL EN VIVO... SI EL VIDEO SE DETIENE, USA EL BOTÓN RECARGAR 🔄</div></div>
             <div class="player-inner">
-                <iframe id="tv-frame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                <iframe id="tv-frame" src="" allowfullscreen allow="autoplay; encrypted-media; presentation" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"></iframe>
             </div>
         </div>
 
-        <div class="quick-grid" id="main-grid">
-            <!-- Iconos de respaldo que siempre funcionan -->
-        </div>
-
+        <div class="container" id="main-grid"></div>
         <footer>© 2026 - AGUSTÍN PIZARRO.</footer>
     </div>
 </div>
 
 <script src="tino_tv_data.js"></script>
 <script>
+    let currentUrl = "";
+
     function fillAssets() {
         const left = document.getElementById('left-ads');
         let html = "";
@@ -107,34 +109,44 @@
     }
 
     function populate(db) {
-        const s1 = document.getElementById('sel-1'), s2 = document.getElementById('sel-2'), grid = document.getElementById('main-grid');
-        db.forEach(c => {
-            const opt = `<option value="${c.source}|${c.id}">${c.name}</option>`;
-            if(c.cat === "DEPORTES") s1.innerHTML += opt;
-            else s2.innerHTML += opt;
-
-            const card = document.createElement('button');
-            card.className = 'q-card';
-            card.innerText = c.name;
-            card.onclick = () => play(c.source, c.id);
-            grid.appendChild(card);
+        const sDep = document.getElementById('sel-dep'), sTv = document.getElementById('sel-tv'), sCine = document.getElementById('sel-cine'), grid = document.getElementById('main-grid');
+        const cats = [...new Set(db.map(c => c.cat))];
+        cats.forEach(cat => {
+            const h3 = document.createElement('h3'); h3.style.cssText="font-size:11px; color:#444; margin:15px 0 10px 0; text-transform:uppercase;"; h3.innerText = cat;
+            grid.appendChild(h3);
+            const div = document.createElement('div'); div.className = 'channels-grid';
+            db.filter(c => c.cat === cat).forEach(canal => {
+                const opt = `<option value="${canal.source}|${canal.id}">${canal.name}</option>`;
+                if(cat === "DEPORTES") sDep.innerHTML += opt; else if(cat === "TV ABIERTA") sTv.innerHTML += opt; else if(cat === "CINE") sCine.innerHTML += opt;
+                const card = document.createElement('button'); card.className = 'channel-card';
+                card.innerHTML = `<div style="font-size:18px">📺</div><div style="font-size:9px;margin-top:5px;">${canal.name}</div>`;
+                card.onclick = () => play(canal.source, canal.id);
+                div.appendChild(card);
+            });
+            grid.appendChild(div);
         });
     }
 
-    function loadFromSelect(id) {
+    function go(id) {
         const val = document.getElementById(id).value;
         if(val) { const parts = val.split('|'); play(parts[0], parts[1]); }
     }
 
     function play(source, id) {
         const frame = document.getElementById('tv-frame');
-        let url = "";
-        if(source === "cablevision") url = `https://www.cablevisionhd.com/${id}-en-vivo.php`;
-        else if(source === "ksd") url = `https://embed.ksdjugfsddeports.com/embed/${id}.html`;
-        else url = `https://streamx550.com/global1.php?channel=${id}`;
+        currentUrl = (source === "cablevision") ? `https://www.cablevisionhd.com/${id}-en-vivo.php` : (source === "ksd" ? `https://embed.ksdjugfsddeports.com/embed/${id}.html` : `https://streamx550.com/global1.php?channel=${id}`);
+        frame.src = currentUrl;
+        document.getElementById('scroll-node').scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-        frame.src = url;
-        document.getElementById('tv-content').scrollTo({ top: 0, behavior: 'smooth' });
+    // FUNCIÓN PARA SOLUCIONAR EL CARGANDO DE LOS 20 MINUTOS
+    function refreshPlayer() {
+        const frame = document.getElementById('tv-frame');
+        if(currentUrl) {
+            console.log("Reiniciando memoria del reproductor...");
+            frame.src = ""; // Limpiamos la RAM del iframe
+            setTimeout(() => { frame.src = currentUrl; }, 100); // Reconectamos la señal
+        }
     }
 
     async function updateNews() {
